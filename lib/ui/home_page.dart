@@ -14,6 +14,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
+  int _initialLabelIndex = 0;
   bool _visibleLogin = true;
   bool _visibleRegister = false;
 
@@ -196,9 +197,11 @@ class _HomePage extends State<HomePage> {
 
   void switchContainer(index) {
     if (index == 0) {
+      _initialLabelIndex = 0;
       _visibleLogin = true;
       _visibleRegister = false;
     } else {
+      _initialLabelIndex = 1;
       _visibleLogin = false;
       _visibleRegister = true;
     }
@@ -219,25 +222,18 @@ class _HomePage extends State<HomePage> {
         children: [
           Column(
             children: [
-              Padding(
-                padding:
-                    EdgeInsets.only(top: returnResponsiveHeight(context, 0.05)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/logos/area14_logo_white.png',
-                      width: returnResponsiveWidth(context, 0.8),
-                    ),
-                  ],
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Image.asset(
+                  'assets/logos/area14_logo_white.png',
+                  height: returnResponsiveHeight(context, 0.3),
                 ),
-              ),
+              ]),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
                     width: returnResponsiveWidth(context, 0.9),
-                    height: returnResponsiveHeight(context, 0.55),
+                    height: returnResponsiveHeight(context, 0.6),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
                       color: Colors.white,
@@ -253,16 +249,13 @@ class _HomePage extends State<HomePage> {
                               ToggleSwitch(
                                 minWidth: returnResponsiveWidth(context, 0.3),
                                 cornerRadius: 20.0,
-                                activeBgColors: const [
-                                  [secondaryColor],
-                                  [secondaryColor]
-                                ],
+                                activeBgColor: const [secondaryColor],
                                 borderColor: const [textColor],
                                 borderWidth: 1.0,
                                 activeFgColor: Colors.white,
                                 inactiveBgColor: Colors.white,
                                 inactiveFgColor: textColor,
-                                initialLabelIndex: 0,
+                                initialLabelIndex: _initialLabelIndex,
                                 totalSwitches: 2,
                                 labels: const ['Iniciar sesión', 'Registrate'],
                                 customTextStyles: [
@@ -341,7 +334,7 @@ class _HomePage extends State<HomePage> {
                 ],
               )
             ],
-          )
+          ),
         ],
       ),
     );
