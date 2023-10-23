@@ -6,6 +6,7 @@ import 'package:fisioterapia/ui/notifications_list.dart';
 import 'package:fisioterapia/ui/ui_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fisioterapia/common/event.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -15,7 +16,10 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPage extends State<MainPage> {
-  bool checked = false;
+  List<Event> listEvents = [];
+  List<Event> filterEvents = [];
+
+  DateTime dateSelected = DateTime.now();
 
   double returnResponsiveWidth(context, double originalPercentValue) {
     return MediaQuery.of(context).size.width * originalPercentValue;
@@ -28,6 +32,45 @@ class _MainPage extends State<MainPage> {
   double returnResponsiveFontSize(context, double originalValue) {
     return (MediaQuery.of(context).size.width * originalValue) /
         masterScreenWidth;
+  }
+
+  void filterEventsByDay() {
+    filterEvents = [];
+    for (Event event in listEvents) {
+      if (dateSelected
+          .toString()
+          .split(" ")[0]
+          .contains(event.dateInit?.split(" ")[0] as Pattern)) {
+        filterEvents.add(event);
+      }
+    }
+  }
+
+  void updateEvent(Event newEvent) {
+    bool result = false;
+    for (var i = 0; i < listEvents.length && !result; i++) {
+      if (listEvents[i].id == newEvent.id) {
+        listEvents[i] = newEvent;
+        result = true;
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    listEvents
+        .add(Event(0, "Alejandro", 0, "2023-10-23 10:00", "11/12/23", false));
+    listEvents
+        .add(Event(1, "Marcos", 1, "2023-10-24 11:00", "12/12/23", false));
+    listEvents
+        .add(Event(2, "Carlos", 2, "2023-10-25 12:00", "13/12/23", false));
+    listEvents
+        .add(Event(3, "Miguel", 3, "2023-10-26 13:00", "14/12/23", false));
+    listEvents
+        .add(Event(4, "Francisco", 4, "2023-10-27 14:00", "15/12/23", false));
+    listEvents.add(Event(5, "Laura", 5, "2023-10-28 15:00", "16/12/23", false));
+    filterEventsByDay();
   }
 
   /** [customButtonHeader] Método encargado de la construcción visual de cada uno de los bloques de menu situados en la cabecera, como acceso rápido a las funciones principales de la aplicación.
@@ -206,10 +249,15 @@ class _MainPage extends State<MainPage> {
                     width: returnResponsiveWidth(context, 0.95),
                     height: returnResponsiveHeight(context, 0.15),
                     child: CalendarTimeline(
-                      initialDate: DateTime.now(),
+                      initialDate: dateSelected,
                       firstDate: DateTime(2023, 1, 1),
                       lastDate: DateTime(2027, 12, 31),
-                      onDateSelected: (date) => print(date),
+                      onDateSelected: (date) {
+                        setState(() {
+                          dateSelected = date;
+                          filterEventsByDay();
+                        });
+                      },
                       leftMargin: 20,
                       monthColor: greyColor,
                       dayColor: greyColor,
@@ -227,7 +275,7 @@ class _MainPage extends State<MainPage> {
                     width: returnResponsiveWidth(context, 0.9),
                     height: returnResponsiveHeight(context, 0.45),
                     child: ListView.builder(
-                      itemCount: 10,
+                      itemCount: filterEvents.length,
                       itemBuilder: ((context, index) {
                         return Padding(
                           padding: EdgeInsets.only(
@@ -236,7 +284,7 @@ class _MainPage extends State<MainPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Text(
-                                '08:00',
+                                '${filterEvents[index].dateInit?.split(" ")[1]}',
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize:
@@ -264,7 +312,8 @@ class _MainPage extends State<MainPage> {
                                       text: TextSpan(
                                         children: [
                                           TextSpan(
-                                            text: 'Cliente $index \n',
+                                            text:
+                                                '${filterEvents[index].name} \n',
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontSize:
@@ -296,10 +345,12 @@ class _MainPage extends State<MainPage> {
                                         side: BorderSide.none,
                                         onChanged: (bool? value) {
                                           setState(() {
-                                            checked = value!;
+                                            filterEvents[index].complete =
+                                                value!;
+                                            updateEvent(filterEvents[index]);
                                           });
                                         },
-                                        value: checked,
+                                        value: filterEvents[index].complete,
                                         fillColor:
                                             MaterialStateColor.resolveWith(
                                                 (states) => checkboxColor),
