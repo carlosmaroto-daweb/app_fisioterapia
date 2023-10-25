@@ -3,9 +3,11 @@
 import 'package:fisioterapia/ui/ui_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:timelines/timelines.dart';
+import 'package:fisioterapia/common/client.dart';
 
 class ClientProfile extends StatefulWidget {
-  const ClientProfile({super.key});
+  final Client client;
+  const ClientProfile({super.key, required this.client});
 
   @override
   _ClientProfile createState() => _ClientProfile();
@@ -311,7 +313,8 @@ class _ClientProfile extends State<ClientProfile> {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                                text: 'Alejandro Smith \n',
+                                text:
+                                    '${widget.client.name} ${widget.client.lastName}\n',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize:
@@ -319,7 +322,7 @@ class _ClientProfile extends State<ClientProfile> {
                                   fontWeight: FontWeight.bold,
                                 )),
                             TextSpan(
-                                text: 'alexandro@gmail.com',
+                                text: '${widget.client.email}',
                                 style: TextStyle(
                                   color: greyColor,
                                   fontSize:
@@ -359,7 +362,7 @@ class _ClientProfile extends State<ClientProfile> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             customBoxHeader('50', 'Consultas'),
-                            customBoxHeader('23', 'Años'),
+                            customBoxHeader('${widget.client.age}', 'Años'),
                             customBoxHeader('10', 'Adjuntos'),
                           ],
                         ),

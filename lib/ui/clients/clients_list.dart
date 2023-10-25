@@ -4,6 +4,7 @@ import 'package:fisioterapia/ui/clients/client_profile.dart';
 import 'package:fisioterapia/ui/ui_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fisioterapia/common/client.dart';
 
 class ClientsList extends StatefulWidget {
   const ClientsList({super.key});
@@ -13,6 +14,8 @@ class ClientsList extends StatefulWidget {
 }
 
 class _ClientsList extends State<ClientsList> {
+  List<Client> listClients = [];
+
   double returnResponsiveWidth(context, double originalPercentValue) {
     return MediaQuery.of(context).size.width * originalPercentValue;
   }
@@ -24,6 +27,26 @@ class _ClientsList extends State<ClientsList> {
   double returnResponsiveFontSize(context, double originalValue) {
     return (MediaQuery.of(context).size.width * originalValue) /
         masterScreenWidth;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    listClients.add(Client(0, "Joaquín", "Perez", "joaquinp@gmail.com", "43"));
+    listClients
+        .add(Client(1, "Alejandro", "Smith", "alexandro@gmail.com", "23"));
+    listClients.add(Client(2, "Alberto", "Nuñez", "alberto@gmail.com", "12"));
+    listClients.add(Client(3, "Raul", "Plaza", "raul@gmail.com", "76"));
+    listClients.add(Client(4, "Joaquín", "Perez", "joaquinp@gmail.com", "43"));
+    listClients
+        .add(Client(1, "Alejandro", "Smith", "alexandro@gmail.com", "23"));
+    listClients.add(Client(5, "Alberto", "Nuñez", "alberto@gmail.com", "12"));
+    listClients.add(Client(6, "Raul", "Plaza", "raul@gmail.com", "76"));
+    listClients.add(Client(7, "Joaquín", "Perez", "joaquinp@gmail.com", "43"));
+    listClients
+        .add(Client(1, "Alejandro", "Smith", "alexandro@gmail.com", "23"));
+    listClients.add(Client(8, "Alberto", "Nuñez", "alberto@gmail.com", "12"));
+    listClients.add(Client(9, "Raul", "Plaza", "raul@gmail.com", "76"));
   }
 
   Widget customIconActions(IconData icon) {
@@ -45,9 +68,9 @@ class _ClientsList extends State<ClientsList> {
     );
   }
 
-  void handleNavigateTapToClientProfile(BuildContext context) {
-    Navigator.of(context)
-        .push(CupertinoPageRoute(builder: (_) => const ClientProfile()));
+  void handleNavigateTapToClientProfile(BuildContext context, Client client) {
+    Navigator.of(context).push(
+        CupertinoPageRoute(builder: (_) => ClientProfile(client: client)));
   }
 
   @override
@@ -192,7 +215,7 @@ class _ClientsList extends State<ClientsList> {
                         width: returnResponsiveWidth(context, 0.95),
                         height: returnResponsiveHeight(context, 0.85),
                         child: ListView.builder(
-                          itemCount: 10,
+                          itemCount: listClients.length,
                           itemBuilder: ((context, index) {
                             return Padding(
                               padding: EdgeInsets.only(
@@ -221,7 +244,7 @@ class _ClientsList extends State<ClientsList> {
                                         InkWell(
                                           onTap: () {
                                             handleNavigateTapToClientProfile(
-                                                context);
+                                                context, listClients[index]);
                                           },
                                           child: Padding(
                                             padding: EdgeInsets.only(
@@ -241,7 +264,7 @@ class _ClientsList extends State<ClientsList> {
                                                     children: [
                                                       TextSpan(
                                                           text:
-                                                              'Nombre del cliente \n',
+                                                              '${listClients[index].name} \n',
                                                           style: TextStyle(
                                                             color: Colors.black,
                                                             fontSize:

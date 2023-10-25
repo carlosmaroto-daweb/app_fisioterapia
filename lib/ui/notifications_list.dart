@@ -27,8 +27,8 @@ class _NotificationsList extends State<NotificationsList> {
   }
 
   void handleNavigateTapToClientProfile(BuildContext context) {
-    Navigator.of(context)
-        .push(CupertinoPageRoute(builder: (_) => const ClientProfile()));
+    //Navigator.of(context)
+    //    .push(CupertinoPageRoute(builder: (_) => const ClientProfile()));
   }
 
   @override
